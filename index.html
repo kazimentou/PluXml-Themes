@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="author" content="J.P. Pourrez" />
+	<title>Thèmes pour PluXml</title>
+	<style type="text/css">
+		* { margin: 0; padding: 0; }
+		html { background-color: #444;}
+		body { text-align :center; font-family: Sans-Serif; }
+		header { padding: 0.5rem 0; background-color: #eee; }
+		#main { display: flex; flex-wrap: wrap; justify-content: space-around; }
+		fig { display: flex; flex-direction: column; justify-content: space-between; border: 2px solid #eee; margin: 0.3rem; }
+		figcaption { background-color: #eee; color: #fff; padding: 0.2rem 0.5rem;}
+		fig img { margin: 0 auto; }
+		fig span:first-of-type { height: 0; }
+		#aside {
+			position: fixed;
+			top: 0;
+			right: 0;
+			left: 0;
+			bottom: 0;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			align-items: center;
+			background-color: #444;
+		}
+		#aside:not(.active) { display: none; }
+		#aside .scan { position: absolute; top: 0; bottom:0; width: 12%; background-color: transparent; cursor: pointer; }
+		#aside .scan:hover { background-color: #666; opacity: 0.5; }
+		#aside .scan.forbidden { cursor: not-allowed; }
+		#aside > fig { position: relative; }
+		#prev { left: 0; }
+		#next { right: 0; }
+		#close { position: fixed; top: 1rem; right: 1rem; cursor: pointer; }
+		#main img { cursor: pointer; }
+		a { color: inherited; }
+		footer { position: sticky; bottom: 0; display: flex; background-color: lightGray; padding: 0.5rem; }
+		.spacer { flex-grow: 1; }
+		#up { margin-left: 0.5rem; padding: 0 0.5rem; cursor:pointer; }
+		#up:hover {background-color: #aaa; }
+	</style>
+</head><body>
+	<header id="top">
+		<h1>Thèmes</h1>
+	</header>
+	<section id="main"></section>
+	<aside id="aside">
+		<button id="close" type="button">X</button>
+		<fig>
+			<img id="bigPicture" />
+			<figcaption><a id="bigCaption" title="download" download></a></figcaption>
+			<div id="prev" class="scan"></div>
+			<div id="next" class="scan"></div>
+		</fig>
+	</aside>
+	<footer>
+		<span><a href="https://www.pluxml.org" target="_blank">https://www.pluxml.org</a></span>
+		<span class="spacer">&nbsp;</span>
+		<span id="themesCounter"></span>
+		<span id="up">&#9650;</span>
+	</footer>
+	<script>
+		(function() {
+			'use strict';
+
+			const main = document.getElementById('main');
+			const aside = document.getElementById('aside');
+			const bigPicture = document.getElementById('bigPicture');
+			const bigCaption = document.getElementById('bigCaption');
+			var index = 0;
+
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function() {
+				const datas = JSON.parse(this.responseText);
+				if('items' in datas) {
+					datas.items.forEach(function (item, i) {
+						const el = document.createElement('FIG');
+						el.innerHTML = `<span>&nbsp;</span>
+<img id="img-${i}" src="theme-${item.name}/apercu_min.jpg" width="${item.w}" height="${item.h}" alt="" title="${item.name}" />
+<figcaption><a href="theme-${item.name}/archive.zip" download="theme-${item.name}.zip" title="download">${item.name}</a></figcaption>
+`;
+						main.appendChild(el);
+					});
+
+					document.getElementById('themesCounter').textContent =  datas.items.length + ' thèmes';
+
+					document.getElementById('main').onclick = function(event) {
+						if(event.target.tagName == 'IMG') {
+							event.preventDefault();
+							index = parseInt(event.target.id.replace(/^img-/, ''));
+							bigPicture.src = event.target.src.replace(/_min\b/, '_max');
+							bigCaption.textContent = (index + 1) + ': ' + event.target.title;
+							bigCaption.href = 'theme-' + event.target.title + '/archive.zip';
+							bigCaption.download = 'theme-' + event.target.title + '.zip';
+							aside.classList.add('active');
+						}
+					}
+
+					document.getElementById('close').onclick = function(event) { aside.classList.remove('active'); }
+
+					document.getElementById('prev').onclick = function(event) {
+						if(index <= 0) {
+							this.classList.add('forbidden');
+							return;
+						}
+						index--;
+						document.getElementById('img-' + index).click()
+						if(index <= 0) {
+							this.classList.add('forbidden');
+						} else {
+							this.classList.remove('forbidden');
+						}
+					}
+
+					document.getElementById('next').onclick = function(event) {
+						const maxIndex = datas.items.length - 1;
+						if(index >= maxIndex) {
+							return;
+						}
+						index++;
+						document.getElementById('img-' + index).click()
+						if(index >= maxIndex) {
+							this.classList.add('forbidden');
+						} else {
+							this.classList.remove('forbidden');
+						}
+					}
+
+					document.getElementById('up').onclick = function (event) {
+						event.preventDefault();
+						aside.classList.remove('active');
+						document.getElementById('top').scrollIntoView({behavior: 'smooth'});
+					}
+
+				}
+			}
+
+			xhr.open('GET', 'themes.json');
+			xhr.send();
+		})();
+	</script>
+</body></html>
