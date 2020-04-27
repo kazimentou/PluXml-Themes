@@ -94,7 +94,7 @@
 					datas.items.forEach(function (item, i) {
 						const el = document.createElement('FIG');
 						el.innerHTML = `<span>&nbsp;</span>
-<img id="img-${i}" src="theme-${item.name}/apercu_min.jpg" width="${item.w}" height="${item.h}" alt="" title="${item.name}" />
+<img id="img-${i}" src="theme-${item.name}/apercu_min.jpg" width="${item.w}" height="${item.h}" alt="" title="${item.name}" data-preview="${item.preview}" />
 <figcaption><a href="theme-${item.name}/archive.zip" download="theme-${item.name}.zip" title="download">${item.name}</a></figcaption>
 `;
 						main.appendChild(el);
@@ -106,7 +106,7 @@
 						if(event.target.tagName == 'IMG') {
 							event.preventDefault();
 							index = parseInt(event.target.id.replace(/^img-/, ''));
-							bigPicture.src = event.target.src.replace(/_min\b/, '_max');
+							bigPicture.src = event.target.src.replace(/apercu_min.jpg/, event.target.dataset.preview);
 							bigCaption.textContent = (index + 1) + ': ' + event.target.title;
 							bigCaption.href = 'theme-' + event.target.title + '/archive.zip';
 							bigCaption.download = 'theme-' + event.target.title + '.zip';
