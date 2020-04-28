@@ -2,6 +2,11 @@
 html { background-color: #0d1122; }
 body { text-align :center; font-family: Sans-Serif; }
 header { padding: 0.5rem 0; }
+h1 a {
+	font-size: 45%;
+	display: inline-block;
+	width: 10rem;
+}
 #main { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 0.5rem; }
 fig { display: flex; flex-direction: column; justify-content: space-between; border: 2px solid #eee; margin: 0.3rem; background-color: #555; }
 figcaption { background-color: #eee; color: #fff; padding: 0.2rem 0.5rem;}
@@ -73,7 +78,8 @@ span.descr {
 	background-color: #076f17;
 	padding: 0.5rem 1rem;
 	text-align: initial;
-	border-radius: 0;
+	border-radius: 0.5rem;
+	box-shadow: 2px 2px 5px #eee;
 	z-index: 20;
 	transform: translateY(-100%);
 	transition: 0.75s ease transform
