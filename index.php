@@ -81,7 +81,6 @@ if(!file_exists(__DIR__ . '/' . FILENAME)) {
 						if(strtolower($matches[2]) == 'infos.xml') {
 							$content = $zip->getFromIndex($i);
 							if(!empty($content)) {
-								// file_put_contents($target . 'infos.xml', $content);
 								try {
 									$doc = simplexml_load_string($content);
 									$props['title'] = $doc->title->__toString();
@@ -127,10 +126,6 @@ if(!file_exists(__DIR__ . '/' . FILENAME)) {
 
 			if(empty($infos)) {
 				echo RED . 'Missing infos.xml' . END;
-				file_put_contents($target . INFOS, strtr(TEMPLATE, array(
-					'THEME'	=> $t,
-					'DATE'	=> date('d/m/Y', $timestamp),
-				)));
 			}
 			$zip->close();
 
