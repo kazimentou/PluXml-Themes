@@ -30,7 +30,7 @@ EOT;
 const FORMAT_BANNER = YELLOW . '%3d Archive : %s (%d fichiers)' . END;
 // On recherche les fichiers home.php header.php, footer.php, infos.xml, preview.* et screenshoot.* dans les entréées de l'archive .zip
 const PATTERN_ZIP_ENTRIES = '@^/?([^/]+)/((?:home|header|footer)\.php|infos\.xml|(preview|screenshoot)\.(?:jpe?g|png|gif|bmp|svg))\b@i';
-const FILENAME = 'themes.json';
+const FILENAME = 'assets/themes.json';
 
 if(!file_exists(__DIR__ . '/' . FILENAME)) {
 	if(!class_exists('ZipArchive')) {

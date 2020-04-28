@@ -89,6 +89,6 @@
 		}
 	}
 
-	xhr.open('GET', 'themes.json');
+	xhr.open('GET', 'assets/themes.json');
 	xhr.send();
 })();
