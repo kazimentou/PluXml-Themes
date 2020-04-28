@@ -5,58 +5,11 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Thèmes pour PluXml</title>
-	<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+	<link rel="stylesheet" href="assets/style.css" />
 	<meta name="author" content="J.P. Pourrez" />
-	<style type="text/css">
-		* { margin: 0; padding: 0; }
-		html { background-color: #444;}
-		body { text-align :center; font-family: Sans-Serif; }
-		header { padding: 0.5rem 0; }
-		#main { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 0.5rem; }
-		fig { display: flex; flex-direction: column; justify-content: space-between; border: 2px solid #eee; margin: 0.3rem; }
-		figcaption { background-color: #eee; color: #fff; padding: 0.2rem 0.5rem;}
-		fig img { margin: 0 auto; }
-		fig span:first-of-type { height: 0; }
-		#aside {
-			position: fixed;
-			top: 0;
-			right: 0;
-			left: 0;
-			bottom: 0;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-around;
-			align-items: center;
-			background-color: #444;
-		}
-		#aside:not(.active) { display: none; }
-		#aside .scan { position: absolute; top: 0; bottom:0; width: 12%; background-color: transparent; cursor: pointer; }
-		#aside .scan:hover { background-color: #666; opacity: 0.5; }
-		#aside .scan.forbidden { cursor: not-allowed; }
-		#aside > fig { position: relative; }
-		#prev { left: 0; }
-		#next { right: 0; }
-		#close { position: fixed; top: 1rem; right: 1rem; cursor: pointer; }
-		#main img { cursor: pointer; }
-		a { color: inherited; }
-		footer { position: sticky; bottom: 0; display: flex; padding: 0.5rem; }
-		.spacer { flex-grow: 1; }
-		#up { margin-left: 0.5rem; padding: 0 0.5rem; cursor:pointer; }
-		#up:hover {background-color: #aaa; }
-
-		/* https://www.cssmatic.com/gradient-generator#'\-moz\-linear\-gradient\%28top\%2C\%20rgba\%28254\%2C254\%2C254\%2C1\%29\%200\%25\%2C\%20rgba\%28245\%2C245\%2C245\%2C1\%29\%209\%25\%2C\%20rgba\%28209\%2C209\%2C209\%2C1\%29\%2043\%25\%2C\%20rgba\%28219\%2C219\%2C219\%2C1\%29\%2071\%25\%2C\%20rgba\%28225\%2C225\%2C225\%2C1\%29\%2096\%25\%2C\%20rgba\%28226\%2C226\%2C226\%2C1\%29\%20100\%25\%29\%3B' */
-		.gradient {
-			background: rgba(254,254,254,1);
-			background: -moz-linear-gradient(top, rgba(254,254,254,1) 0%, rgba(245,245,245,1) 9%, rgba(209,209,209,1) 43%, rgba(219,219,219,1) 71%, rgba(225,225,225,1) 96%, rgba(226,226,226,1) 100%);
-			background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(254,254,254,1)), color-stop(9%, rgba(245,245,245,1)), color-stop(43%, rgba(209,209,209,1)), color-stop(71%, rgba(219,219,219,1)), color-stop(96%, rgba(225,225,225,1)), color-stop(100%, rgba(226,226,226,1)));
-			background: -webkit-linear-gradient(top, rgba(254,254,254,1) 0%, rgba(245,245,245,1) 9%, rgba(209,209,209,1) 43%, rgba(219,219,219,1) 71%, rgba(225,225,225,1) 96%, rgba(226,226,226,1) 100%);
-			background: -o-linear-gradient(top, rgba(254,254,254,1) 0%, rgba(245,245,245,1) 9%, rgba(209,209,209,1) 43%, rgba(219,219,219,1) 71%, rgba(225,225,225,1) 96%, rgba(226,226,226,1) 100%);
-			background: -ms-linear-gradient(top, rgba(254,254,254,1) 0%, rgba(245,245,245,1) 9%, rgba(209,209,209,1) 43%, rgba(219,219,219,1) 71%, rgba(225,225,225,1) 96%, rgba(226,226,226,1) 100%);
-			background: linear-gradient(to bottom, rgba(254,254,254,1) 0%, rgba(245,245,245,1) 9%, rgba(209,209,209,1) 43%, rgba(219,219,219,1) 71%, rgba(225,225,225,1) 96%, rgba(226,226,226,1) 100%);
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefefe', endColorstr='#e2e2e2', GradientType=0 );
-		}
-	</style>
+	<meta name="description" content="Galerie de thèmes pour le CMS PLuXml" />
 </head><body>
 	<header id="top" class="gradient">
 		<h1>Thèmes</h1>
@@ -77,84 +30,5 @@
 		<span id="themesCounter"></span>
 		<span id="up">&#9650;</span>
 	</footer>
-	<script>
-		(function() {
-			'use strict';
-
-			const main = document.getElementById('main');
-			const aside = document.getElementById('aside');
-			const bigPicture = document.getElementById('bigPicture');
-			const bigCaption = document.getElementById('bigCaption');
-			var index = 0;
-
-			const xhr = new XMLHttpRequest();
-			xhr.onload = function() {
-				const datas = JSON.parse(this.responseText);
-				if('items' in datas) {
-					datas.items.forEach(function (item, i) {
-						const el = document.createElement('FIG');
-						el.innerHTML = `<span>&nbsp;</span>
-<img id="img-${i}" src="theme-${item.name}/apercu_min.jpg" width="${item.w}" height="${item.h}" alt="" title="${item.name}" data-preview="${item.preview}" />
-<figcaption><a href="theme-${item.name}/archive.zip" download="theme-${item.name}.zip" title="download">${item.name}</a></figcaption>
-`;
-						main.appendChild(el);
-					});
-
-					document.getElementById('themesCounter').textContent =  datas.items.length + ' thèmes';
-
-					document.getElementById('main').onclick = function(event) {
-						if(event.target.tagName == 'IMG') {
-							event.preventDefault();
-							index = parseInt(event.target.id.replace(/^img-/, ''));
-							bigPicture.src = event.target.src.replace(/apercu_min.jpg/, event.target.dataset.preview);
-							bigCaption.textContent = (index + 1) + ': ' + event.target.title;
-							bigCaption.href = 'theme-' + event.target.title + '/archive.zip';
-							bigCaption.download = 'theme-' + event.target.title + '.zip';
-							aside.classList.add('active');
-						}
-					}
-
-					document.getElementById('close').onclick = function(event) { aside.classList.remove('active'); }
-
-					document.getElementById('prev').onclick = function(event) {
-						if(index <= 0) {
-							this.classList.add('forbidden');
-							return;
-						}
-						index--;
-						document.getElementById('img-' + index).click()
-						if(index <= 0) {
-							this.classList.add('forbidden');
-						} else {
-							this.classList.remove('forbidden');
-						}
-					}
-
-					document.getElementById('next').onclick = function(event) {
-						const maxIndex = datas.items.length - 1;
-						if(index >= maxIndex) {
-							return;
-						}
-						index++;
-						document.getElementById('img-' + index).click()
-						if(index >= maxIndex) {
-							this.classList.add('forbidden');
-						} else {
-							this.classList.remove('forbidden');
-						}
-					}
-
-					document.getElementById('up').onclick = function (event) {
-						event.preventDefault();
-						aside.classList.remove('active');
-						document.getElementById('top').scrollIntoView({behavior: 'smooth'});
-					}
-
-				}
-			}
-
-			xhr.open('GET', 'themes.json');
-			xhr.send();
-		})();
-	</script>
+	<script src="assets/script.js"></script>
 </body></html>
